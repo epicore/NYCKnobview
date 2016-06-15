@@ -22,8 +22,8 @@ Import the NYCKnobView files for use in your own projects.
 
 ## Requirements
 
-The project was created in Xcode 7.3.1, written for Swift 2.2
-And the code-base is created to work with iOS 8.0 - iOS 9.3 (the current version).
+The project was created in Xcode 7.3.1 and written for Swift 2.2.
+The code-base is created to work with iOS 8.0 - iOS 9.3.
 
 ## Support
 
