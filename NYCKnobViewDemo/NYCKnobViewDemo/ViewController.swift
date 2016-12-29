@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, NYCKnobViewDelegate {
+class ViewController: UIViewController {
     
     // MARK: IBOutlet methods
 
@@ -21,9 +21,25 @@ class ViewController: UIViewController, NYCKnobViewDelegate {
     
     // MARK: IBAction method(s)
 
-    @IBAction func handleResetBtn(sender: UIButton?){
+    @IBAction func handleResetBtn(_ sender: UIButton?){
         self.configureKnobValues()
         self.lbl1.text = "Reset all knobs"
+    }
+    
+    @IBAction func handleKnobView1Change(_ sender: NYCKnobView!) {
+        self.showKnobValues(sender)
+    }
+    
+    @IBAction func handleKnobView2Change(_ sender: NYCKnobView!) {
+        self.showKnobValues(sender)
+    }
+    
+    @IBAction func handleKnobView3Change(_ sender: NYCKnobView!) {
+        self.showKnobValues(sender)
+    }
+    
+    @IBAction func handleKnobView4Change(_ sender: NYCKnobView!) {
+        self.showKnobValues(sender)
     }
 
     // MARK: Lifecycle methods
@@ -33,7 +49,7 @@ class ViewController: UIViewController, NYCKnobViewDelegate {
         self.configureKnobViews()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.configureKnobValues()
     }
@@ -46,20 +62,15 @@ class ViewController: UIViewController, NYCKnobViewDelegate {
     // MARK: Init methods
 
     func configureKnobViews(){
-        self.knobView1.delegate = self
-        self.knobView1.minValue = 1
-        self.knobView1.maxValue = 11
-        self.knobView1.knobFormatType = NYCKnobFormatType.Integer
+        self.knobView1.minimumValue = 1
+        self.knobView1.maximumValue = 11
+        self.knobView1.knobFormatType = NYCKnobFormatType.integer
 
-        // default settings
-        self.knobView2.delegate = self
-     
-        self.knobView3.delegate = self
-        self.knobView3.minValue = 0
-        self.knobView3.maxValue = 1.0
-        self.knobView3.knobFormatType = NYCKnobFormatType.Percentage
-
-        self.knobView4.delegate = self
+        // default settings for knobview2
+        
+        self.knobView3.minimumValue = 0
+        self.knobView3.maximumValue = 1.0
+        self.knobView3.knobFormatType = NYCKnobFormatType.percentage
     }
     
     func configureKnobValues(){
@@ -69,17 +80,7 @@ class ViewController: UIViewController, NYCKnobViewDelegate {
         self.knobView4.value = 0.1
     }
 
-    // MARK: NYCKnobViewDelegate method(s)
-    
-    func knobValueChanged(sender: NYCKnobView){
-        self.showKnobValues(sender)
-    }
-    
-    func knobValueUpdateComplete(sender: NYCKnobView){
-        self.showKnobValues(sender)
-    }
-    
-    func showKnobValues(sender: NYCKnobView){
+    func showKnobValues(_ sender: NYCKnobView){
         
         var text = ""
         let dataStr = NSString(format: "%.2f", sender.value) as String

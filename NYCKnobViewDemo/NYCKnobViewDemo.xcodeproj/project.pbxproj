@@ -12,9 +12,9 @@
 		072AB5A41D062DF500059F48 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 072AB5A21D062DF400059F48 /* Main.storyboard */; };
 		072AB5A61D062DF500059F48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 072AB5A51D062DF500059F48 /* Assets.xcassets */; };
 		072AB5A91D062DF500059F48 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 072AB5A71D062DF500059F48 /* LaunchScreen.storyboard */; };
+		074B29EF1E14BDCA0092CFED /* NYCKnobView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074B29ED1E14BDCA0092CFED /* NYCKnobView.swift */; };
+		074B29F01E14BDCA0092CFED /* NYCKnobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 074B29EE1E14BDCA0092CFED /* NYCKnobView.xib */; };
 		079530041D10E6BF00A52A00 /* UIView+Borders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079530031D10E6BF00A52A00 /* UIView+Borders.swift */; };
-		0795300B1D11AA7200A52A00 /* NYCKnobView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079530091D11AA7200A52A00 /* NYCKnobView.swift */; };
-		0795300C1D11AA7200A52A00 /* NYCKnobView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0795300A1D11AA7200A52A00 /* NYCKnobView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,9 +25,9 @@
 		072AB5A51D062DF500059F48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		072AB5A81D062DF500059F48 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		072AB5AA1D062DF500059F48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		074B29ED1E14BDCA0092CFED /* NYCKnobView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NYCKnobView.swift; path = ../../NYCKnobView.swift; sourceTree = "<group>"; };
+		074B29EE1E14BDCA0092CFED /* NYCKnobView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NYCKnobView.xib; path = ../../NYCKnobView.xib; sourceTree = "<group>"; };
 		079530031D10E6BF00A52A00 /* UIView+Borders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Borders.swift"; sourceTree = "<group>"; };
-		079530091D11AA7200A52A00 /* NYCKnobView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NYCKnobView.swift; path = ../../NYCKnobView.swift; sourceTree = "<group>"; };
-		0795300A1D11AA7200A52A00 /* NYCKnobView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NYCKnobView.xib; path = ../../NYCKnobView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,8 +74,8 @@
 		072AB5B01D062E2700059F48 /* NYCKnobView */ = {
 			isa = PBXGroup;
 			children = (
-				079530091D11AA7200A52A00 /* NYCKnobView.swift */,
-				0795300A1D11AA7200A52A00 /* NYCKnobView.xib */,
+				074B29ED1E14BDCA0092CFED /* NYCKnobView.swift */,
+				074B29EE1E14BDCA0092CFED /* NYCKnobView.xib */,
 				079530031D10E6BF00A52A00 /* UIView+Borders.swift */,
 			);
 			name = NYCKnobView;
@@ -108,12 +108,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "3rd Street Apps";
 				TargetAttributes = {
 					072AB59A1D062DF400059F48 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = CGFSUXS6D7;
+						LastSwiftMigration = 0820;
 					};
 				};
 			};
@@ -143,7 +144,7 @@
 				072AB5A91D062DF500059F48 /* LaunchScreen.storyboard in Resources */,
 				072AB5A61D062DF500059F48 /* Assets.xcassets in Resources */,
 				072AB5A41D062DF500059F48 /* Main.storyboard in Resources */,
-				0795300C1D11AA7200A52A00 /* NYCKnobView.xib in Resources */,
+				074B29F01E14BDCA0092CFED /* NYCKnobView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,7 +158,7 @@
 				079530041D10E6BF00A52A00 /* UIView+Borders.swift in Sources */,
 				072AB5A11D062DF400059F48 /* ViewController.swift in Sources */,
 				072AB59F1D062DF400059F48 /* AppDelegate.swift in Sources */,
-				0795300B1D11AA7200A52A00 /* NYCKnobView.swift in Sources */,
+				074B29EF1E14BDCA0092CFED /* NYCKnobView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,8 +198,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -220,7 +223,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -243,8 +246,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -260,9 +265,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -274,10 +280,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = NYCKnobViewDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.3rdstreetapps.NYCKnobViewDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -287,10 +294,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = NYCKnobViewDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.3rdstreetapps.NYCKnobViewDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

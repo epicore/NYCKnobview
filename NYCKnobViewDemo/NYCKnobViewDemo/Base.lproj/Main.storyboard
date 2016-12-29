@@ -80,17 +80,21 @@
                                         <exclude reference="z66-j8-5Qd"/>
                                     </mask>
                                 </variation>
+                                <connections>
+                                    <action selector="handleKnobView4Change:" destination="BYZ-38-t0r" eventType="valueChanged" id="6DN-wi-6vg"/>
+                                </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="azq-th-E3W" userLabel="side knobs holder">
                                 <rect key="frame" x="400" y="59" width="160" height="533"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Djn-Bx-B3x" customClass="NYCKnobView" customModule="NYCKnobViewDemo" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="160" height="200"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="160" height="160"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="110" id="5kj-b5-ZR2"/>
                                             <constraint firstAttribute="width" secondItem="Djn-Bx-B3x" secondAttribute="height" multiplier="1:1" id="Xua-BC-MER"/>
                                             <constraint firstAttribute="width" constant="110" id="deM-6i-Rqd"/>
+                                            <constraint firstAttribute="width" secondItem="Djn-Bx-B3x" secondAttribute="height" multiplier="1:1" id="mJg-TM-QJX"/>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="title" value="VOLUME"/>
@@ -132,9 +136,12 @@
                                                 <exclude reference="deM-6i-Rqd"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="handleKnobView1Change:" destination="BYZ-38-t0r" eventType="valueChanged" id="d4h-2s-J9K"/>
+                                        </connections>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cQm-To-dWV" customClass="NYCKnobView" customModule="NYCKnobViewDemo" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="212" width="160" height="200"/>
+                                        <rect key="frame" x="0.0" y="172" width="160" height="160"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="cQm-To-dWV" secondAttribute="height" multiplier="1:1" id="9bK-dx-LEp"/>
@@ -169,9 +176,12 @@
                                                 <exclude reference="zDd-uh-1Ew"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="handleKnobView2Change:" destination="BYZ-38-t0r" eventType="valueChanged" id="z7z-yx-sNM"/>
+                                        </connections>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mbv-E4-s53" userLabel="Knob View3" customClass="NYCKnobView" customModule="NYCKnobViewDemo" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="424" width="160" height="200"/>
+                                        <rect key="frame" x="0.0" y="344" width="160" height="160"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="110" id="0aQ-5z-1f8"/>
@@ -222,17 +232,22 @@
                                                 <exclude reference="sWe-lH-ubh"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="handleKnobView3Change:" destination="BYZ-38-t0r" eventType="valueChanged" id="Zti-q8-wHC"/>
+                                        </connections>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="Djn-Bx-B3x" firstAttribute="leading" secondItem="azq-th-E3W" secondAttribute="leading" id="4QK-mX-ZLL"/>
                                     <constraint firstItem="cQm-To-dWV" firstAttribute="leading" secondItem="azq-th-E3W" secondAttribute="leading" id="6lU-oJ-lad"/>
+                                    <constraint firstItem="Djn-Bx-B3x" firstAttribute="height" secondItem="cQm-To-dWV" secondAttribute="height" id="8Sl-3s-T6X"/>
                                     <constraint firstItem="mbv-E4-s53" firstAttribute="leading" secondItem="azq-th-E3W" secondAttribute="leading" id="98h-T7-qcY"/>
                                     <constraint firstAttribute="trailing" secondItem="mbv-E4-s53" secondAttribute="trailing" id="Cby-q6-WWp"/>
                                     <constraint firstAttribute="trailing" secondItem="cQm-To-dWV" secondAttribute="trailing" id="D6z-Eg-zJw"/>
                                     <constraint firstAttribute="width" constant="150" id="Nbb-pM-q4w"/>
                                     <constraint firstItem="Djn-Bx-B3x" firstAttribute="top" secondItem="azq-th-E3W" secondAttribute="top" id="YVv-pC-kBq"/>
+                                    <constraint firstItem="cQm-To-dWV" firstAttribute="height" secondItem="mbv-E4-s53" secondAttribute="height" id="eCs-8P-nFO"/>
                                     <constraint firstAttribute="width" constant="160" id="gqX-8J-Tl2"/>
                                     <constraint firstAttribute="trailing" secondItem="Djn-Bx-B3x" secondAttribute="trailing" id="s0b-Vu-Msh"/>
                                     <constraint firstItem="mbv-E4-s53" firstAttribute="top" secondItem="cQm-To-dWV" secondAttribute="bottom" constant="12" id="vEa-SZ-2W0"/>

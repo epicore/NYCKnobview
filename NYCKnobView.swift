@@ -8,92 +8,63 @@
 
 import UIKit
 
-// MARK: Delegate Definition
-
-@objc protocol NYCKnobViewDelegate: class {
-    
-    // knobValue changed occurs continously while gesture is in progress
-    optional func knobValueChanged(sender: NYCKnobView)
-    
-    // knobValue updated occurs after gesture is complete
-    func knobValueUpdateComplete(sender: NYCKnobView)
-    
-}
-
 // Enum for type of data to be handled by the knob
 enum NYCKnobFormatType: Int {
-    case Decimal = 0
-    case Integer
-    case Percentage
+    case decimal = 0
+    case integer
+    case percentage
 }
+
+fileprivate let _startAngle = CGFloat(M_PI * -1.328)
+fileprivate let _endAngle = CGFloat(M_PI * 0.328)
 
 // MARK: Class Definition
 
-@IBDesignable class NYCKnobView: UIView{
+@IBDesignable class NYCKnobView: UIControl{
     
     // MARK: Outlets
     
     @IBOutlet weak var knobBg: UIImageView!
     @IBOutlet weak var knobPointer: UIImageView!
     @IBOutlet weak var valueLbl: UILabel!
-    @IBOutlet weak var titleLbl: UILabel!
-    @IBOutlet weak var minValueLbl: UILabel!
-    @IBOutlet weak var maxValueLbl: UILabel!
     
     // MARK: Private Ivars
     
-    private var _minValue: CGFloat = 0.0
-    private var _maxValue: CGFloat = 1.0
-    private var _value: CGFloat = 0.0
-    private var _gestureRecognizer:NYCRotationGestureRecognizer?
-    private var _valueRange:CGFloat { return CGFloat(_maxValue - _minValue)}
-    private var _pointerAngle: CGFloat = -CGFloat(M_PI * 1.328)
-    private var _startAngle: CGFloat = -CGFloat(M_PI * 1.328)
-    private var _endAngle: CGFloat = CGFloat(M_PI * 0.328)
+    fileprivate var _value = 0.0 as CGFloat
+    fileprivate var _gestureRecognizer: NYCRotationGestureRecognizer?
+    fileprivate var _valueRange: CGFloat {
+        return self.maximumValue - self.minimumValue
+    }
     
     // MARK: Public Ivars
     
-    weak var delegate:NYCKnobViewDelegate?
-    var imageTint:UIColor?
+    var continuous = true
+    var imageTint: UIColor?
     {
         didSet{
+            self.knobBg.image = self.knobBg.image?.withRenderingMode(.alwaysTemplate)
+            self.knobPointer.image = self.knobPointer.image?.withRenderingMode(.alwaysTemplate)
             self.knobBg.tintColor = imageTint
             self.knobPointer.tintColor = imageTint
         }
     }
-    var knobFormatType = NYCKnobFormatType.Decimal
-    var view:UIView! // holder for view elements loaded from the nib
-    var startAngle: CGFloat{
+    var knobFormatType: NYCKnobFormatType = NYCKnobFormatType.decimal
+    var view: UIView! // holder for view elements loaded from the nib
+    var debugString: String{
         get{
-            return _startAngle
-        }
-        set{
-            _startAngle = newValue
-        }
-    }
-    var endAngle : CGFloat{
-        get{
-            return _endAngle
-        }
-        set{
-            _endAngle = newValue
-        }
-    }
-    var debugString:String{
-        get{
-            return "rotation : \(NSString(format: "%.3f", _gestureRecognizer!.rotation)), pointerAngle: \(NSString(format: "%.3f", _pointerAngle)) & value: \(NSString(format: "%.3f", _value))"
+            return "rotation : \(NSString(format: "%.3f", _gestureRecognizer!.rotation)), pointerAngle: \(NSString(format: "%.3f", self.pointerAngle)) & value: \(NSString(format: "%.3f", _value))"
         }
     }
     var value: Float {
         get {
-            if self.knobFormatType == .Integer{
+            if self.knobFormatType == .integer{
                 return round(Float(_value))
             } else {
                 return Float(_value)
             }
         }
         set {
-            if self.knobFormatType == .Integer{
+            if self.knobFormatType == .integer{
                 setValue(CGFloat(round(newValue)), animated: true)
             } else {
                 setValue(CGFloat(newValue), animated: true)
@@ -101,38 +72,25 @@ enum NYCKnobFormatType: Int {
             self.valueLbl.text = self.convertFloatToString(_value)
         }
     }
-    
-    var pointerAngle: CGFloat {
-        get {
-            return _pointerAngle
-        }
-        set {
+    var pointerAngle: CGFloat = _startAngle {
+        willSet {
             self.setPointerAngle(newValue, animated: false)
         }
     }
     
-    var minValue: CGFloat{
-        get{
-            return _minValue
-        }
-        set(newValue){
-            // guard against insane values
-            if newValue >= 0 && newValue < _maxValue {
-                _minValue = newValue
-                self.minValueLbl.text = self.convertFloatToString(_minValue)
-            }
-        }
-    }
+    @IBInspectable var startAngle = _startAngle
+    @IBInspectable var endAngle = _endAngle
+    @IBInspectable var minimumValue = 0.0 as CGFloat
+    @IBInspectable var maximumValue = 1.0 as CGFloat
     
-    var maxValue: CGFloat{
-        get{
-            return _maxValue
-        }
-        set(newValue){
-            // guard against insane values
-            if newValue > _minValue {
-                _maxValue = newValue
-                self.maxValueLbl.text = self.convertFloatToString(_maxValue)
+    // MARK: Override(s)
+    
+    override var isEnabled: Bool{
+        didSet{
+            if(isEnabled){
+                self.alpha = 1.0
+            } else {
+                self.alpha = 0.65
             }
         }
     }
@@ -151,48 +109,55 @@ enum NYCKnobFormatType: Int {
     
     // MARK: Configuration Methods
     
-    private func initKnob(){
+    fileprivate func initKnob(){
         self.setupNib()
         self.configGestureRecognizer()
+        // set knob angle to start value position
+        self.setKnobAngleFor(CGFloat(self.value), animated:false)
     }
     
-    private func configGestureRecognizer(){
+    fileprivate func configGestureRecognizer(){
         _gestureRecognizer = NYCRotationGestureRecognizer(target: self, action: #selector(NYCKnobView.handleRotation(_:)))
         self.addGestureRecognizer(_gestureRecognizer!)
     }
     
-    private func setupNib() {
+    fileprivate func setupNib() {
         self.view = loadViewFromNib()
         self.view.frame = bounds
-        self.view.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
+        self.view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
         addSubview(self.view)
     }
     
-    private func loadViewFromNib() -> UIView {
-        let bundle = NSBundle(forClass: self.dynamicType)
-        let nib = UINib(nibName: String(self.dynamicType), bundle: bundle)
-        let retview = nib.instantiateWithOwner(self, options: nil).first as! UIView
+    fileprivate func loadViewFromNib() -> UIView {
+        let bundle = Bundle(for: type(of: self))
+        let nib = UINib(nibName: String(describing: type(of: self)), bundle: bundle)
+        let retview = nib.instantiate(withOwner: self, options: nil).first as! UIView
         return retview
     }
     
     // MARK: Private Helper Methods
     
-    private func convertFloatToString(val:CGFloat) -> String{
+    fileprivate func convertFloatToString(_ val:CGFloat) -> String{
         
         var retString = NSString()
         
         switch(self.knobFormatType){
-        case .Decimal:
+        case .decimal:
             retString = NSString(format: "%.1f", val)
+            
             // get rid of the decimal for max, min, and when its less than 2 decimal places difference
-            if(val <= self.minValue || val >= self.maxValue || round(100*val)/100 == floor(val)){
+            if(val <= self.minimumValue || val >= self.maximumValue || round(100*val)/100 == floor(val)){
                 retString = NSString(format: "%.0f", val)
             }
-        case .Integer:
+            
+        case .integer:
+            
             retString = NSString(format: "%.0f", val)
-        case .Percentage:
+        
+        case .percentage:
+        
             retString = NSString(format: "%.0f%%", val*100)
-            if(val <= self.minValue || val >= self.maxValue){
+            if(val <= self.minimumValue || val >= self.maximumValue){
                 retString = NSString(format: "%.0f", val*100)
             }
         }
@@ -206,45 +171,45 @@ enum NYCKnobFormatType: Int {
         self.setValue(_value, animated:true)
     }
     
-    func setPointerAngle(pointerAngle: CGFloat, animated: Bool) {
+    func setPointerAngle(_ pointerAngle: CGFloat, animated: Bool) {
         self.movePointerToAngle(pointerAngle, animated: animated)
-        _pointerAngle = pointerAngle
     }
     
-    func setValue(value: CGFloat, animated: Bool) {
-        if(value != _value) {
-            
-            // limit the backing value to the requested bounds
-            _value = min(_maxValue, max(_minValue, value))
-            
-            // update the knob with the correct angle
-            let angleRange = _endAngle - _startAngle
-            let angle = (value - _minValue) / _valueRange * angleRange + _startAngle
-            self.setPointerAngle(angle, animated: animated)
-        }
+    func setValue(_ value: CGFloat, animated: Bool) {
+        // limit the backing value to the requested bounds
+        _value = min(self.maximumValue, max(self.minimumValue, value))
+        self.setKnobAngleFor(value, animated: animated)
     }
     
-    func movePointerToAngle(pointerAngle: CGFloat, animated: Bool) {
+    // private helper
+    func setKnobAngleFor(_ value: CGFloat, animated: Bool){
+        // update the knob with the correct angle
+        let angleRange = self.endAngle - self.startAngle
+        let angle = (value - self.minimumValue) / _valueRange * angleRange + self.startAngle
+        self.setPointerAngle(angle, animated: animated)
+    }
+    
+    func movePointerToAngle(_ pointerAngle: CGFloat, animated: Bool) {
         if animated {
-            UIView.animateWithDuration(0.25
+            UIView.animate(withDuration: 0.25
                 , delay: 0
-                , options: [.CurveEaseOut, .BeginFromCurrentState]
+                , options: [.curveEaseOut, .beginFromCurrentState]
                 , animations:{
-                    self.knobPointer?.transform = CGAffineTransformMakeRotation(pointerAngle)
+                    self.knobPointer?.transform = CGAffineTransform(rotationAngle: pointerAngle)
                 }, completion: nil)
             
         } else {
-            self.knobPointer?.transform = CGAffineTransformMakeRotation(pointerAngle)
+            self.knobPointer?.transform = CGAffineTransform(rotationAngle: pointerAngle)
         }
     }
     
     // MARK: Handler Method(s)
     
-    func handleRotation(sender: AnyObject) {
+    func handleRotation(_ sender: AnyObject) {
         let gr = sender as! NYCRotationGestureRecognizer
         
         // 1. Mid-point angle
-        let midPointAngle = (2.0 * CGFloat(M_PI) + _startAngle - _endAngle) / 2.0 + _endAngle
+        let midPointAngle = (2.0 * CGFloat(M_PI) + self.startAngle - self.endAngle) / 2.0 + self.endAngle
         
         // 2. Ensure the angle is within a suitable range
         var boundedAngle = gr.rotation
@@ -255,22 +220,24 @@ enum NYCKnobFormatType: Int {
         }
         
         // 3. Bound the angle to within the suitable range
-        boundedAngle = min(_endAngle, max(_startAngle, boundedAngle))
+        boundedAngle = min(self.endAngle, max(self.startAngle, boundedAngle))
         
         // 4. Convert the angle to a value
-        let angleRange = _endAngle - _startAngle
-        let valueForAngle = (boundedAngle - _startAngle) / angleRange * _valueRange + _minValue
+        let angleRange = self.endAngle - self.startAngle
+        let valueForAngle = (boundedAngle - self.startAngle) / angleRange * _valueRange + self.minimumValue
         
         // 5. Set the control to this value
         self.setValue(valueForAngle, animated:false)
         self.valueLbl.text = self.convertFloatToString(valueForAngle)
         
-        print("rotation : \(gr.rotation), boundedAngle : \(boundedAngle) & valueForAngle: \(valueForAngle)")
-        
-        if(gr.state == UIGestureRecognizerState.Ended){
-            self.delegate?.knobValueUpdateComplete(self)
+        // Notify of value change
+        if continuous {
+            sendActions(for: .valueChanged)
         } else {
-            self.delegate?.knobValueChanged?(self)
+            // Only send an update if the gesture has completed
+            if (gr.state == UIGestureRecognizerState.ended) || (gr.state == UIGestureRecognizerState.cancelled) {
+                sendActions(for: .valueChanged)
+            }
         }
     }
 }
@@ -290,56 +257,12 @@ extension NYCKnobView {
         }
     }
     
-    @IBInspectable var startingAngle: Float {
-        get{
-            return Float(self.startAngle)
-        }
-        set(newValue){
-            if CGFloat(newValue) < self.endAngle {
-                self.startAngle = CGFloat(newValue)
-            }
-        }
-    }
-    
-    @IBInspectable var endingAngle: Float {
-        get{
-            return Float(self.endAngle)
-        }
-        set(newValue){
-            if CGFloat(newValue) > self.startAngle {
-                self.endAngle = CGFloat(newValue)
-            }
-        }
-    }
-
-    @IBInspectable var minimumValue: Float {
-        get{
-            return Float(self.minValue)
-        }
-        set(newValue){
-            if CGFloat(newValue) < self.maxValue {
-                self.minValue = CGFloat(newValue)
-            }
-        }
-    }
-    
-    @IBInspectable var maximumValue: Float {
-        get{
-            return Float(self.maxValue)
-        }
-        set(newValue){
-            if CGFloat(newValue) > self.minValue {
-                self.maxValue = CGFloat(newValue)
-            }
-        }
-    }
-    
-    @IBInspectable var knobFormat:Int {
+    @IBInspectable var knobFormat: Int {
         get {
             return self.knobFormatType.rawValue
         }
         set( newFormatType) {
-            self.knobFormatType = NYCKnobFormatType(rawValue:newFormatType) ?? NYCKnobFormatType.Decimal
+            self.knobFormatType = NYCKnobFormatType(rawValue:newFormatType) ?? NYCKnobFormatType.decimal
         }
     }
     
@@ -348,7 +271,7 @@ extension NYCKnobView {
             return self.knobBg?.image
         }
         set(img){
-            self.knobBg?.image = img?.imageWithRenderingMode(.AlwaysTemplate)
+            self.knobBg?.image = img?.withRenderingMode(.alwaysTemplate)
         }
     }
     
@@ -357,16 +280,7 @@ extension NYCKnobView {
             return self.knobPointer?.image
         }
         set(img){
-            self.knobPointer?.image = img?.imageWithRenderingMode(.AlwaysTemplate)
-        }
-    }
-    
-    @IBInspectable var title: String? {
-        get{
-            return self.titleLbl.text
-        }
-        set(newText){
-            self.titleLbl.text = newText
+            self.knobPointer?.image = img?.withRenderingMode(.alwaysTemplate)
         }
     }
     
@@ -377,9 +291,6 @@ extension NYCKnobView {
         set(newColorOpt) {
             if let newColor = newColorOpt{
                 self.valueLbl.textColor = newColor
-                self.titleLbl.textColor = newColor
-                self.minValueLbl.textColor = newColor
-                self.maxValueLbl.textColor = newColor
             }
         }
     }
@@ -429,12 +340,12 @@ extension NYCKnobView {
         get{
             var retColor:UIColor?
             if let cgColor = self.view.layer.borderColor{
-                retColor = UIColor(CGColor: cgColor)
+                retColor = UIColor(cgColor: cgColor)
             }
             return retColor
         }
         set(newColor){
-            self.view.layer.borderColor = newColor?.CGColor
+            self.view.layer.borderColor = newColor?.cgColor
         }
     }
 }
@@ -446,29 +357,29 @@ import UIKit.UIGestureRecognizerSubclass
 private class NYCRotationGestureRecognizer: UIPanGestureRecognizer {
     var rotation: CGFloat = 0.0
     
-    override init(target: AnyObject?, action: Selector) {
+    override init(target: Any?, action: Selector?) {
         super.init(target: target, action: action)
         minimumNumberOfTouches = 1
         maximumNumberOfTouches = 1
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent) {
-        super.touchesBegan(touches, withEvent: event)
-        updateRotationWithTouches(touches)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesBegan(touches, with: event)
+        updateRotationWithTouches(touches as NSSet!)
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent) {
-        super.touchesMoved(touches, withEvent: event)
-        updateRotationWithTouches(touches)
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
+        super.touchesMoved(touches, with: event)
+        updateRotationWithTouches(touches as NSSet!)
     }
     
-    func updateRotationWithTouches(touches: NSSet!) {
+    func updateRotationWithTouches(_ touches: NSSet!) {
         let touch = touches.anyObject() as! UITouch
-        let location = touch.locationInView(self.view)
+        let location = touch.location(in: self.view)
         self.rotation = rotationForLocation(location)
     }
     
-    func rotationForLocation(location: CGPoint) -> CGFloat {
+    func rotationForLocation(_ location: CGPoint) -> CGFloat {
         let offset = CGPoint(x: location.x - view!.bounds.midX, y: location.y - view!.bounds.midY)
         return atan2(offset.y, offset.x)
     }
