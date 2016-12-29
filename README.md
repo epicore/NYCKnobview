@@ -2,7 +2,7 @@
 
 **Project Demo showcasing NYCKnobView in a sample Xcode Project**
 
-NYCKnobView is a  UI Component for use in Xcode, written in Swift 2.2, and based on the [Raywenderlich Resuable Knob Tutorial] 
+NYCKnobView is a  UI Component for use in Xcode, written in Swift, and based on the [Raywenderlich Resuable Knob Tutorial] 
 (https://www.raywenderlich.com/82058/custom-control-tutorial-ios-swift-reusable-knob)
 NYCKnobView has UX consistent with a real-world turn knob and it's implemented as an IBDesignable to allow various parameters to be set in the Interface Builder.
 
@@ -22,8 +22,8 @@ Import the NYCKnobView files for use in your own projects.
 
 ## Requirements
 
-The project was created in Xcode 7.3.1 and written for Swift 2.2.
-The code-base is created to work with iOS 8.0 - iOS 9.3.
+The project requires Xcode 8.2.1 and Swift 3.0.
+The code-base is created to work with iOS 9.0 - iOS 10.+
 
 ## Support
 
