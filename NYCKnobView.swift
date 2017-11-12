@@ -15,33 +15,30 @@ enum NYCKnobFormatType: Int {
     case percentage
 }
 
-fileprivate let _startAngle = CGFloat(M_PI * -1.328)
-fileprivate let _endAngle = CGFloat(M_PI * 0.328)
+fileprivate let _startAngle = CGFloat(Double.pi * -1.328)
+fileprivate let _endAngle = CGFloat(Double.pi * 0.328)
 
-// MARK: Class Definition
-
-@IBDesignable class NYCKnobView: UIControl{
+@IBDesignable class NYCKnobView: UIControl {
     
-    // MARK: Outlets
+    // MARK: IBOutlets
     
     @IBOutlet weak var knobBg: UIImageView!
     @IBOutlet weak var knobPointer: UIImageView!
     @IBOutlet weak var valueLbl: UILabel!
     
-    // MARK: Private Ivars
+    // MARK: Private vars
     
     fileprivate var _value = 0.0 as CGFloat
-    fileprivate var _gestureRecognizer: NYCRotationGestureRecognizer?
-    fileprivate var _valueRange: CGFloat {
+    fileprivate var gestureRecognizer: NYCRotationGestureRecognizer?
+    fileprivate var valueRange: CGFloat {
         return self.maximumValue - self.minimumValue
     }
     
     // MARK: Public Ivars
     
     var continuous = true
-    var imageTint: UIColor?
-    {
-        didSet{
+    var imageTint: UIColor? {
+        didSet {
             self.knobBg.image = self.knobBg.image?.withRenderingMode(.alwaysTemplate)
             self.knobPointer.image = self.knobPointer.image?.withRenderingMode(.alwaysTemplate)
             self.knobBg.tintColor = imageTint
@@ -50,21 +47,21 @@ fileprivate let _endAngle = CGFloat(M_PI * 0.328)
     }
     var knobFormatType: NYCKnobFormatType = NYCKnobFormatType.decimal
     var view: UIView! // holder for view elements loaded from the nib
-    var debugString: String{
-        get{
-            return "rotation : \(NSString(format: "%.3f", _gestureRecognizer!.rotation)), pointerAngle: \(NSString(format: "%.3f", self.pointerAngle)) & value: \(NSString(format: "%.3f", _value))"
+    var debugString: String {
+        get {
+            return "rotation : \(NSString(format: "%.3f", self.gestureRecognizer!.rotation)), pointerAngle: \(NSString(format: "%.3f", self.pointerAngle)) & value: \(NSString(format: "%.3f", _value))"
         }
     }
     var value: Float {
         get {
-            if self.knobFormatType == .integer{
+            if self.knobFormatType == .integer {
                 return round(Float(_value))
             } else {
                 return Float(_value)
             }
         }
         set {
-            if self.knobFormatType == .integer{
+            if self.knobFormatType == .integer {
                 setValue(CGFloat(round(newValue)), animated: true)
             } else {
                 setValue(CGFloat(newValue), animated: true)
@@ -85,9 +82,9 @@ fileprivate let _endAngle = CGFloat(M_PI * 0.328)
     
     // MARK: Override(s)
     
-    override var isEnabled: Bool{
-        didSet{
-            if(isEnabled){
+    override var isEnabled: Bool {
+        didSet {
+            if isEnabled {
                 self.alpha = 1.0
             } else {
                 self.alpha = 0.65
@@ -109,16 +106,16 @@ fileprivate let _endAngle = CGFloat(M_PI * 0.328)
     
     // MARK: Configuration Methods
     
-    fileprivate func initKnob(){
+    fileprivate func initKnob() {
         self.setupNib()
         self.configGestureRecognizer()
         // set knob angle to start value position
         self.setKnobAngleFor(CGFloat(self.value), animated:false)
     }
     
-    fileprivate func configGestureRecognizer(){
-        _gestureRecognizer = NYCRotationGestureRecognizer(target: self, action: #selector(NYCKnobView.handleRotation(_:)))
-        self.addGestureRecognizer(_gestureRecognizer!)
+    fileprivate func configGestureRecognizer() {
+        self.gestureRecognizer = NYCRotationGestureRecognizer(target: self, action: #selector(NYCKnobView.handleRotation(_:)))
+        self.addGestureRecognizer(self.gestureRecognizer!)
     }
     
     fileprivate func setupNib() {
@@ -130,23 +127,24 @@ fileprivate let _endAngle = CGFloat(M_PI * 0.328)
     
     fileprivate func loadViewFromNib() -> UIView {
         let bundle = Bundle(for: type(of: self))
-        let nib = UINib(nibName: String(describing: type(of: self)), bundle: bundle)
+        let nibName = String(describing: type(of: self))
+        let nib = UINib(nibName: nibName, bundle: bundle)
         let retview = nib.instantiate(withOwner: self, options: nil).first as! UIView
         return retview
     }
     
     // MARK: Private Helper Methods
     
-    fileprivate func convertFloatToString(_ val:CGFloat) -> String{
+    fileprivate func convertFloatToString(_ val:CGFloat) -> String {
         
         var retString = NSString()
         
-        switch(self.knobFormatType){
+        switch self.knobFormatType {
         case .decimal:
             retString = NSString(format: "%.1f", val)
             
-            // get rid of the decimal for max, min, and when its less than 2 decimal places difference
-            if(val <= self.minimumValue || val >= self.maximumValue || round(100*val)/100 == floor(val)){
+            // get rid of the decimal for max, min, and when it starts with '0.0'
+            if val <= self.minimumValue || val >= self.maximumValue || retString.hasPrefix("0.0") {
                 retString = NSString(format: "%.0f", val)
             }
             
@@ -157,7 +155,7 @@ fileprivate let _endAngle = CGFloat(M_PI * 0.328)
         case .percentage:
         
             retString = NSString(format: "%.0f%%", val*100)
-            if(val <= self.minimumValue || val >= self.maximumValue){
+            if val <= self.minimumValue || val >= self.maximumValue {
                 retString = NSString(format: "%.0f", val*100)
             }
         }
@@ -167,7 +165,7 @@ fileprivate let _endAngle = CGFloat(M_PI * 0.328)
     
     // MARK: Public Helper Methods
     
-    func resetKnob(){
+    func resetKnob() {
         self.setValue(_value, animated:true)
     }
     
@@ -176,16 +174,16 @@ fileprivate let _endAngle = CGFloat(M_PI * 0.328)
     }
     
     func setValue(_ value: CGFloat, animated: Bool) {
-        // limit the backing value to the requested bounds
+        // limit the backing value to the specified bounds
         _value = min(self.maximumValue, max(self.minimumValue, value))
         self.setKnobAngleFor(value, animated: animated)
     }
     
     // private helper
-    func setKnobAngleFor(_ value: CGFloat, animated: Bool){
+    func setKnobAngleFor(_ value: CGFloat, animated: Bool) {
         // update the knob with the correct angle
         let angleRange = self.endAngle - self.startAngle
-        let angle = (value - self.minimumValue) / _valueRange * angleRange + self.startAngle
+        let angle = (value - self.minimumValue) / self.valueRange * angleRange + self.startAngle
         self.setPointerAngle(angle, animated: animated)
     }
     
@@ -194,7 +192,7 @@ fileprivate let _endAngle = CGFloat(M_PI * 0.328)
             UIView.animate(withDuration: 0.25
                 , delay: 0
                 , options: [.curveEaseOut, .beginFromCurrentState]
-                , animations:{
+                , animations: {
                     self.knobPointer?.transform = CGAffineTransform(rotationAngle: pointerAngle)
                 }, completion: nil)
             
@@ -205,26 +203,27 @@ fileprivate let _endAngle = CGFloat(M_PI * 0.328)
     
     // MARK: Handler Method(s)
     
+    @objc
     func handleRotation(_ sender: AnyObject) {
         let gr = sender as! NYCRotationGestureRecognizer
         
         // 1. Mid-point angle
-        let midPointAngle = (2.0 * CGFloat(M_PI) + self.startAngle - self.endAngle) / 2.0 + self.endAngle
+        let midPointAngle = (2.0 * CGFloat(Double.pi) + self.startAngle - self.endAngle) / 2.0 + self.endAngle
         
         // 2. Ensure the angle is within a suitable range
         var boundedAngle = gr.rotation
         if boundedAngle > midPointAngle {
-            boundedAngle -= 2.0 * CGFloat(M_PI)
-        } else if boundedAngle < (midPointAngle - 2.0 * CGFloat(M_PI)) {
-            boundedAngle += 2 * CGFloat(M_PI)
+            boundedAngle -= 2.0 * CGFloat(Double.pi)
+        } else if boundedAngle < (midPointAngle - 2.0 * CGFloat(Double.pi)) {
+            boundedAngle += 2 * CGFloat(Double.pi)
         }
         
-        // 3. Bound the angle to within the suitable range
+        // 3. Bound the angle within a suitable range
         boundedAngle = min(self.endAngle, max(self.startAngle, boundedAngle))
         
         // 4. Convert the angle to a value
         let angleRange = self.endAngle - self.startAngle
-        let valueForAngle = (boundedAngle - self.startAngle) / angleRange * _valueRange + self.minimumValue
+        let valueForAngle = (boundedAngle - self.startAngle) / angleRange * self.valueRange + self.minimumValue
         
         // 5. Set the control to this value
         self.setValue(valueForAngle, animated:false)
@@ -235,7 +234,7 @@ fileprivate let _endAngle = CGFloat(M_PI * 0.328)
             sendActions(for: .valueChanged)
         } else {
             // Only send an update if the gesture has completed
-            if (gr.state == UIGestureRecognizerState.ended) || (gr.state == UIGestureRecognizerState.cancelled) {
+            if gr.state == UIGestureRecognizerState.ended || gr.state == UIGestureRecognizerState.cancelled  {
                 sendActions(for: .valueChanged)
             }
         }
@@ -252,7 +251,7 @@ extension NYCKnobView {
         get {
             return Float(self.value)
         }
-        set(newValue){
+        set {
             self.setValue(CGFloat(newValue), animated:false)
         }
     }
@@ -261,8 +260,8 @@ extension NYCKnobView {
         get {
             return self.knobFormatType.rawValue
         }
-        set( newFormatType) {
-            self.knobFormatType = NYCKnobFormatType(rawValue:newFormatType) ?? NYCKnobFormatType.decimal
+        set {
+            self.knobFormatType = NYCKnobFormatType(rawValue:newValue) ?? NYCKnobFormatType.decimal
         }
     }
     
@@ -270,8 +269,8 @@ extension NYCKnobView {
         get {
             return self.knobBg?.image
         }
-        set(img){
-            self.knobBg?.image = img?.withRenderingMode(.alwaysTemplate)
+        set {
+            self.knobBg?.image = newValue?.withRenderingMode(.alwaysTemplate)
         }
     }
     
@@ -279,28 +278,28 @@ extension NYCKnobView {
         get {
             return self.knobPointer?.image
         }
-        set(img){
-            self.knobPointer?.image = img?.withRenderingMode(.alwaysTemplate)
+        set {
+            self.knobPointer?.image = newValue?.withRenderingMode(.alwaysTemplate)
         }
     }
     
     @IBInspectable var textColor: UIColor? {
-        get{
+        get {
             return self.valueLbl.textColor
         }
-        set(newColorOpt) {
-            if let newColor = newColorOpt{
+        set {
+            if let newColor = newValue {
                 self.valueLbl.textColor = newColor
             }
         }
     }
     
     @IBInspectable var knobTint: UIColor? {
-        get{
+        get {
             return self.imageTint
         }
-        set(newColorOpt) {
-            if let newColor = newColorOpt{
+        set {
+            if let newColor = newValue {
                 self.imageTint = newColor
             }
         }
@@ -310,42 +309,42 @@ extension NYCKnobView {
         get{
             return self.view.backgroundColor
         }
-        set(newColorOpt) {
-            if let newColor = newColorOpt{
+        set {
+            if let newColor = newValue {
                 self.view.backgroundColor = newColor
             }
         }
     }
     
     @IBInspectable var knobCornerRadius: CGFloat {
-        get{
+        get {
             return self.view.layer.cornerRadius
         }
-        set(newRadius){
-            self.view.layer.cornerRadius = newRadius
-            self.view.layer.masksToBounds = newRadius > 0
+        set {
+            self.view.layer.cornerRadius = newValue
+            self.view.layer.masksToBounds = newValue > 0
         }
     }
     
     @IBInspectable var knobBorderWidth: CGFloat {
-        get{
+        get {
             return self.view.layer.borderWidth
         }
-        set(newWidth){
-            self.view.layer.borderWidth = newWidth
+        set {
+            self.view.layer.borderWidth = newValue
         }
     }
     
     @IBInspectable var knobBorderColor: UIColor? {
-        get{
+        get {
             var retColor:UIColor?
-            if let cgColor = self.view.layer.borderColor{
+            if let cgColor = self.view.layer.borderColor {
                 retColor = UIColor(cgColor: cgColor)
             }
             return retColor
         }
-        set(newColor){
-            self.view.layer.borderColor = newColor?.cgColor
+        set {
+            self.view.layer.borderColor = newValue?.cgColor
         }
     }
 }
